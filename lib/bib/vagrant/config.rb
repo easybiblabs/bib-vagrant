@@ -31,6 +31,10 @@ module Bib
         File.exists?(get_path)
       end
 
+      def get_path
+        File.expand_path("#{@@home}/.config/easybib/vagrantdefault.yml")
+      end
+
       private
       def create(localconfigpath, vagrantconfig)
         begin
@@ -43,10 +47,6 @@ module Bib
         rescue
           puts "WARNING: Unable to create default #{localconfigpath} - please do it manually." if @@verbose
         end
-      end
-
-      def get_path
-        File.expand_path("#{@@home}/.config/easybib/vagrantdefault.yml")
       end
 
       def get_defaults
