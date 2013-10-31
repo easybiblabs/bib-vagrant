@@ -1,6 +1,7 @@
 # Bib::Vagrant
 
-TODO: Write a gem description
+[![Build Status](https://travis-ci.org/easybiblabs/bib-vagrant.png?branch=master)](https://travis-ci.org/easybiblabs/bib-vagrant)
+[![Coverage Status](https://coveralls.io/repos/easybiblabs/bib-vagrant/badge.png)](https://coveralls.io/r/easybiblabs/bib-vagrant)
 
 ## Installation
 
