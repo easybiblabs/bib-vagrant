@@ -13,7 +13,6 @@ module Bib
       end
 
       def get
-
         vagrantconfig = get_defaults
 
         begin
@@ -51,17 +50,12 @@ module Bib
         errors << "cookbook_path: does not exist" unless File.directory?(config['cookbook_path'])
         errors << "chef_log_level: must be one of #{log_level.join}" unless log_level.include?(config['chef_log_level'])
 
-
         if !config['additional_json'].empty?
-          begin
-            JSON.parse(config['additional_json'])
-          rescue JSON::ParserError
-            errors << "additional_json: should be empty or valid json"
-          end
+          errors << "additional_json: must be empty or valid json" unless is_valid_json?(config['additional_json'])
         end
 
         if errors.count == 0
-          return
+          return true
         end
 
         raise "Errors: #{errors.join(', ')}"
@@ -89,6 +83,15 @@ module Bib
           "additional_json" => '{}',
           "gui" => false
         }
+      end
+
+      def is_valid_json?(json)
+        begin
+          JSON.parse(json)
+          return true
+        rescue JSON::ParserError
+          false
+        end
       end
 
     end

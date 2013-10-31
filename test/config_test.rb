@@ -49,7 +49,12 @@ class ConfigTest < Minitest::Test
       c.validate!(config)
     }
 
-    config["additional_json"] = "{'hello': 'world'}"
+    config["nfs"] = false
+    config["cookbook_path"] = @@fixture_dir
+
+    assert(c.validate!(config))
+
+    config["additional_json"] = "{'hello'}"
 
     assert_raises(RuntimeError) {
       c.validate!(config)
