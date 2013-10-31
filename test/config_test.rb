@@ -48,6 +48,13 @@ class ConfigTest < Minitest::Test
     assert_raises(RuntimeError) {
       c.validate!(config)
     }
+
+    config["additional_json"] = "{'hello': 'world'}"
+
+    assert_raises(RuntimeError) {
+      c.validate!(config)
+    }
+
   end
 
 end

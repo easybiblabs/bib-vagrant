@@ -51,6 +51,15 @@ module Bib
         errors << "cookbook_path: does not exist" unless File.directory?(config['cookbook_path'])
         errors << "chef_log_level: must be one of #{log_level.join}" unless log_level.include?(config['chef_log_level'])
 
+
+        if !config['additional_json'].empty?
+          begin
+            JSON.parse(config['additional_json'])
+          rescue JSON::ParserError
+            errors << "additional_json: should be empty or valid json"
+          end
+        end
+
         if errors.count == 0
           return
         end
