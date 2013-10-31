@@ -7,8 +7,7 @@ class BibVagrant < Thor
 
   desc 'show', 'show configuration settings'
   def show
-    config = Bib::Vagrant::Config.new
-    raise "No configuration, run `bib-vagrant setup`!" unless config.has?
+    config = get_wrapper
 
     puts "Your configuration is located in: #{config.get_path}"
     puts ""
@@ -28,4 +27,10 @@ class BibVagrant < Thor
     puts "Configuration created in #{config.get_path}!"
   end
 
+  private
+  def get_wrapper
+    config = Bib::Vagrant::Config.new
+    raise "No configuration, run `bib-vagrant setup`!" unless config.has?
+    config
+  end
 end
