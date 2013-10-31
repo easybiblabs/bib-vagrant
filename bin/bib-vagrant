@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'bib/vagrant'
+require 'colored'
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+begin
+  BibVagrant.start
+rescue => the_error
+  puts the_error.to_s.white_on_red
+  exit 1
+end
