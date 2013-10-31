@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = Bib::Vagrant::VERSION
   spec.authors       = ["till"]
   spec.email         = ["till@php.net"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.description   = "A rubygem to centralize configuration and setup in every project's Vagrantfile"
+  spec.summary       = "Centralize configuration and setup"
+  spec.homepage      = "https://github.com/easybiblabs/bib-vagrant"
+  spec.license       = "BSD"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -20,4 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "minitest", "~> 5.0.8"
+  spec.add_development_dependency "coveralls"
 end
