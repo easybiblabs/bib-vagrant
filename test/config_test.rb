@@ -7,9 +7,11 @@ class ConfigTest < Minitest::Test
   def setup
     @@fixture_dir = File.dirname(__FILE__) + "/fixtures"
 
-    FileUtils.rm_rf @@fixture_dir if File.exists?(@@fixture_dir)
     FileUtils.mkdir @@fixture_dir
+  end
 
+  def teardown
+    FileUtils.rm_rf @@fixture_dir if File.exists?(@@fixture_dir)
   end
 
   def test_config
