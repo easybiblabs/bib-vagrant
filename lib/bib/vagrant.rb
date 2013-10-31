@@ -5,6 +5,15 @@ require "thor"
 class BibVagrant < Thor
   package_name 'bib-vagrant'
 
+  desc 'validate', 'validate the local configuration'
+  def validate
+    config = get_wrapper
+
+    vagrant_defaults = config.get
+    config.validate!(vagrant_defaults)
+
+  end
+
   desc 'show', 'show configuration settings'
   def show
     config = get_wrapper

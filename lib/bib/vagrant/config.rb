@@ -35,6 +35,29 @@ module Bib
         File.expand_path("#{@@home}/.config/easybib/vagrantdefault.yml")
       end
 
+      def validate!(config)
+
+        current_config_keys = config.keys
+
+        get_defaults.keys.each do |required_key|
+          raise "Missing #{required_key}!" unless current_config_keys.include?(required_key)
+        end
+
+        errors = []
+        log_level = ['debug', 'info', 'warn', 'error', 'fatal']
+
+        errors << "nfs: must be a boolean" unless [TrueClass, FalseClass].include?(config['nfs'].class)
+        errors << "gui: must be a boolean" unless [TrueClass, FalseClass].include?(config['gui'].class)
+        errors << "cookbook_path: does not exist" unless File.directory?(config['cookbook_path'])
+        errors << "chef_log_level: must be one of #{log_level.join}" unless log_level.include?(config['chef_log_level'])
+
+        if errors.count == 0
+          return
+        end
+
+        raise "Errors: #{errors.join(', ')}"
+      end
+
       private
       def create(localconfigpath, vagrantconfig)
         begin
