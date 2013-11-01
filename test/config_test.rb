@@ -50,7 +50,7 @@ class ConfigTest < Minitest::Test
     }
 
     config["nfs"] = false
-    config["cookbook_path"] = @@fixture_dir
+    config["cookbook_path"] = '~/'
 
     assert(c.validate!(config))
 
