@@ -44,11 +44,12 @@ module Bib
 
         errors = []
         log_level = ['debug', 'info', 'warn', 'error', 'fatal']
+        bool = [TrueClass, FalseClass]
 
         cookbook_path = File.expand_path(config['cookbook_path'])
 
-        errors << "nfs: must be a boolean" unless [TrueClass, FalseClass].include?(config['nfs'].class)
-        errors << "gui: must be a boolean" unless [TrueClass, FalseClass].include?(config['gui'].class)
+        errors << "nfs: must be a boolean" unless bool.include?(config['nfs'].class)
+        errors << "gui: must be a boolean" unless bool.include?(config['gui'].class)
         errors << "cookbook_path: does not exist" unless File.directory?(cookbook_path)
         errors << "chef_log_level: must be one of #{log_level.join}" unless log_level.include?(config['chef_log_level'])
 
