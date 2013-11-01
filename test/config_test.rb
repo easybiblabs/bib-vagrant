@@ -31,4 +31,35 @@ class ConfigTest < Minitest::Test
     assert_equal(false, vagrant_config["gui"])
 
   end
+
+  # I wish I knew how to write a data provider with minitest
+  def test_validate!
+    config = {
+      "nfs" => "yes",
+      "gui" => false,
+      "cookbook_path" => "/this/does/not/exist",
+      "chef_log_level" => "debug",
+      "additional_json" => ""
+    }
+
+    c = Bib::Vagrant::Config.new(@@fixture_dir, false)
+    vagrant_config = c.get
+
+    assert_raises(RuntimeError) {
+      c.validate!(config)
+    }
+
+    config["nfs"] = false
+    config["cookbook_path"] = @@fixture_dir
+
+    assert(c.validate!(config))
+
+    config["additional_json"] = "{'hello'}"
+
+    assert_raises(RuntimeError) {
+      c.validate!(config)
+    }
+
+  end
+
 end
