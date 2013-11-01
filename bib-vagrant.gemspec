@@ -6,12 +6,12 @@ require 'bib/vagrant/version'
 Gem::Specification.new do |spec|
   spec.name          = "bib-vagrant"
   spec.version       = Bib::Vagrant::VERSION
-  spec.authors       = ["till", "fh"]
+  spec.authors       = ["tillk", "fh"]
   spec.email         = ["till@php.net"]
   spec.description   = "A rubygem to centralize configuration and setup in every project's Vagrantfile"
   spec.summary       = "Centralize configuration and setup"
   spec.homepage      = "https://github.com/easybiblabs/bib-vagrant"
-  spec.license       = "BSD"
+  spec.license       = "New BSD License"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
