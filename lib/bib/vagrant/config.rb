@@ -23,7 +23,7 @@ module Bib
           create(get_path, vagrantconfig)
         end
 
-        return vagrantconfig
+        vagrantconfig
       end
 
       def has?
