@@ -5,6 +5,12 @@
 
 This is a work in progress - and subject to [additions and changes](CONTRIBUTING.md).
 
+## Objective
+
+ 1. Remove developer-specific settings from a project's `Vagrantfile`.
+ 2. Streamline setup/onboarding.
+ 3. Avoid stale settings all around.
+
 ## Installation
 
 Install the plugin:
