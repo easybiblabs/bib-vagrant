@@ -16,7 +16,6 @@ module VagrantPlugins
     module Vagrant
       class Plugin < ::Vagrant.plugin("2")
 
-        puts "MEH"
         name "bib-vagrant"
         description <<-DESC
         This is a fake plugin to get bib::vagrant into vagrant
