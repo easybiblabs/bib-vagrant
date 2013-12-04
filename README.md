@@ -16,6 +16,8 @@ This is a work in progress - and subject to [additions and changes](CONTRIBUTING
 Install the plugin:
 
     $ vagrant plugin install bib-vagrant
+    
+Do not use this command in a directory with a Vagrantfile which requires the plugin. Vagrant does _always_ include the Vagrantfile, and therefore will fail before installation because of the missing plugin. Just ```cd``` somewhere else and retry the command, maybe from your homedir?
 
 ## Usage
 ### Developer Settings
