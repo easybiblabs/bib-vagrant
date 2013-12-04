@@ -16,8 +16,39 @@ This is a work in progress - and subject to [additions and changes](CONTRIBUTING
 Install the plugin:
 
     $ vagrant plugin install bib-vagrant
+    
+Do not use this command in a directory with a Vagrantfile which requires the plugin. Vagrant does _always_ include the Vagrantfile, and therefore will fail before installation because of the missing plugin. Just ```cd``` somewhere else and retry the command, maybe from your homedir?
 
 ## Usage
+### Developer Settings
+The config file with all developer specific settings is currently ```~/.config/easybib/vagrantdefault.yml```. If no such file exists, the plugin will create the file with default settings.
+
+The content of this file can be retrieved using the plugin as an array, the the Vagrantfile-Example below for usage.
+
+The current default settings and their respective usage in our Vagrantfiles are:
+
+```
+
+#Use filesystem shares over nfs
+nfs: false 
+
+#Path to the cookbooks
+cookbook_path: ~/Sites/easybib/cookbooks
+
+#Chef Log Level
+chef_log_level: debug
+
+#Additional JSON to be merged in the Chef JSON
+additional_json: ! '{}'
+
+#Show Virtualbox GUI
+gui: false
+```
+
+Additional parameters can be added to the file and used in the Vagrantfile - but you then have to make sure to use sensible fallback defaults in your Vagrantfile, since not every developer might have this setting in the .yml.
+
+
+### Vagrantfile
 
 In your `Vagrantfile`:
 
