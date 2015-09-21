@@ -21,6 +21,10 @@ module VagrantPlugins
         This is a fake plugin to get bib::vagrant into vagrant
         DESC
 
+        provisioner(:shell) do
+          require 'provisioner'
+          Provisioner
+        end
       end
     end
   end

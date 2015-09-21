@@ -5,3 +5,4 @@ rescue LoadError
 end
 
 require "bib/vagrant/plugin"
+require "bib/vagrant/provisioner"
