@@ -43,6 +43,22 @@ additional_json: ! '{}'
 
 #Show Virtualbox GUI
 gui: false
+
+# Token to use with composer
+composer_github_token: <github token>
+
+# Token to use with npm
+npm_auth: <npm-token>
+
+# npm proxy in the form of "http://npm-proxy.tld/"
+npm_registry: <npm-proxy>
+
+# your npm user email address in the form of user@domain.tld
+npm_email: <email address>
+
+# the npm always-auth setting (usually true)
+npm_always-auth: true
+
 ```
 
 Additional parameters can be added to the file and used in the Vagrantfile - but you then have to make sure to use sensible fallback defaults in your Vagrantfile, since not every developer might have this setting in the .yml.
@@ -75,7 +91,9 @@ Vagrant.configure("2") do |config|
       chef.add_recipe "something::here"
       chef.log_level = vagrantconfig["chef_log_level"]
     end
-
+    
+    web_config.vm.provision "bib_configure" 
+    
   end
 ```
 
@@ -88,6 +106,11 @@ cookbook_path: ~/Documents/workspaces/easybib-cookbooks
 chef_log_level: debug
 additional_json: ! '{}'
 gui: true
+composer_github_token: <github token>
+npm_auth: <npm-token>
+npm_registry: <npm-proxy>
+npm_email: <email address>
+npm_always-auth: true
 ```
 
 ## Contributing
