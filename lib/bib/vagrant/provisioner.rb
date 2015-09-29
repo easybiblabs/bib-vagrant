@@ -31,7 +31,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         bib_config.validate!(bib_config_values)
 
         # sneaky fix to "stdin: is not a tty" noise
-        send_command("sudo sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile")
+        # sudo_command("sudo sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile")
 
         if bib_config_values.include?('npm_auth')
           npmrc_set('_auth',bib_config_values['npm_auth'])
@@ -63,29 +63,42 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         #   @machine.ui.error("Missing composer_github_token value in config")
         # end
   
+        send_command("mkdir -p ~/.npm/_locks")
+        send_command("sudo chown -R $USER ~/.npm")
+
         # Now the machine is up again, perform the necessary tasks.
         @machine.ui.info('bib-vagrant config complete...')
       end
 
       # def composer_set(key, value)
-      #   command = "sudo composer config -g #{key} #{value}"
-      #   send_command(command)
+      #   command = "composer config -g #{key} #{value}"
+      #   sudo_command(command)
       # end
 
       def npmrc_set(key, value)
-        command = "sudo npm -g "
+        command = "npm -g "
         if value
           command << "set #{key} #{value}"
         else
           # if value is null assume a delete
           command << "delete #{key}"
           # fix for npmrc key not existing
-          send_command("sudo npm -g set #{key} GNDN")
+          sudo_command("npm -g set #{key} GNDN")
         end
-        send_command(command)
+        sudo_command(command)
       end
 
-      def send_command(command) 
+      def send_command(command)
+        @machine.communicate.execute(command) do |type, data|
+          if type == :stderr
+            @machine.ui.error(data)
+          else
+            @machine.ui.info(data)
+          end
+        end
+      end
+
+      def sudo_command(command) 
         @machine.communicate.sudo(command) do |type, data|
           if type == :stderr
             @machine.ui.error(data)
@@ -93,7 +106,6 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             @machine.ui.info(data)
           end
         end
-
       end
 
       # Nothing needs to be done on cleanup.
