@@ -118,7 +118,8 @@ class BibConfigurePlugin < Vagrant.plugin('2')
           # fix for npmrc key not existing
           sudo_command("npm -g set #{key} GNDN")
         end
-        @machine.ui.info(command)
+        # do not to echo the command all the time (need if debug?)
+        # @machine.ui.info(command)
         sudo_command(command)
       end
 
