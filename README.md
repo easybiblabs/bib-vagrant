@@ -47,17 +47,18 @@ gui: false
 # Token to use with composer
 composer_github_token: <github token>
 
-# Token to use with npm
-npm_auth: <npm-token>
-
 # npm proxy in the form of "http://npm-proxy.tld/"
-npm_registry: <npm-proxy>
+npm_registry: <npm registry or proxy url>
 
 # your npm user email address in the form of user@domain.tld
-npm_email: <email address>
+npm_username: <github or npm username>
 
-# the npm always-auth setting (usually true)
-npm_always-auth: true
+# your npm or user email address in the form of user@domain.tld
+npm_usermail: <npm or github users email address>
+
+# Authentication Token to use with npm
+npm_userpass: <npm or github authentication token>
+
 
 ```
 
@@ -92,7 +93,7 @@ Vagrant.configure("2") do |config|
       chef.log_level = vagrantconfig["chef_log_level"]
     end
     
-    web_config.vm.provision "bib_configure" 
+    web_config.vm.provision "bib_configure_npm" 
     
   end
 ```
@@ -107,10 +108,10 @@ chef_log_level: debug
 additional_json: ! '{}'
 gui: true
 composer_github_token: <github token>
-npm_auth: <npm-token>
-npm_registry: <npm-proxy>
-npm_email: <email address>
-npm_always-auth: true
+npm_registry: <npm registry or proxy url>
+npm_username: <github or npm username>
+npm_usermail: <npm or github users email address>
+npm_userpass: <npm or github authentication token>
 ```
 
 ## Contributing

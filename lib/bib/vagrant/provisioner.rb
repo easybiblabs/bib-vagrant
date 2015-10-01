@@ -1,12 +1,14 @@
-
 require 'vagrant'
+require 'rubygems'
+require 'rest_client'
+require 'json'
 
 # Define the plugin.
 class BibConfigurePlugin < Vagrant.plugin('2')
-  name 'NPM Plugin'
+  name 'NPM configuration Plugin'
 
   # This plugin provides a provisioner called unix_reboot.
-  provisioner 'bib_configure' do
+  provisioner 'bib_configure_npm' do
  
     # Create a provisioner.
     class BibConfigureProvisioner < Vagrant.plugin('2', :provisioner)
@@ -33,28 +35,44 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         # sneaky fix to "stdin: is not a tty" noise
         # sudo_command("sudo sed -i 's/^mesg n$/tty -s \&\& mesg n/g' /root/.profile")
 
-        if bib_config_values.include?('npm_auth')
-          npmrc_set('_auth',bib_config_values['npm_auth'])
-        else
-          @machine.ui.error("Missing npm_auth value in config")
-        end
+        # inbound variables
+        registry = false
+        username = false
+        usermail = false
+        userpass = false
 
         if bib_config_values.include?('npm_registry')
-          npmrc_set('registry',bib_config_values['npm_registry'])
-        else
-          @machine.ui.error("Missing npm_registry value in config")
+          registry = bib_config_values['npm_registry'].clone
         end
 
-        if bib_config_values.include?('npm_email')
-          npmrc_set('email',bib_config_values['npm_email'])
-        else
-          @machine.ui.error("Missing npm_email value in config")
+        if bib_config_values.include?('npm_username')
+          username = bib_config_values['npm_username'].clone
         end
 
-        if bib_config_values.include?('npm_always-auth')
-          npmrc_set('always-auth',bib_config_values['npm_always-auth'])
-        else
-          @machine.ui.error("Missing npm_always-auth value in config")
+        if bib_config_values.include?('npm_usermail')
+          usermail = bib_config_values['npm_usermail'].clone
+        end
+
+        if bib_config_values.include?('npm_userpass')
+          userpass = bib_config_values['npm_userpass'].clone
+        end
+
+        if ( registry && username && usermail && userpass)
+          token = get_npm_token(registry, username, usermail, userpass)
+          if token
+            registry_ident = registry.clone
+            registry_ident.slice!('http:')
+
+            npmrc_set('always-auth', 'true')
+            npmrc_set('registry', registry)
+            npmrc_set( registry_ident + ':_authToken', '"' + token + '"')
+
+          else
+            @machine.ui.error("npm registry token request failed.")
+          end
+
+        else 
+          @machine.ui.error("Missing an npm_ value in config.")
         end
 
         # if bib_config_values.includ?('composer_github_token')
@@ -105,6 +123,39 @@ class BibConfigurePlugin < Vagrant.plugin('2')
           else
             @machine.ui.info(data)
           end
+        end
+      end
+
+      # my nifty function to get an NPM token from the registry
+      def get_npm_token(registry_url, username, usermail, userpass) 
+        # get the date for some reason
+        date = Time.now;
+        # set up the request _id ??? 
+        _id = 'org.couchdb.user:' + username
+        # set up the registry URL to request the token from
+        url = registry_url + '-/user/' + _id
+        # create json object passed to the registry
+        data = {  _id: _id ,
+              name: username,
+              password: userpass,
+              email: usermail,
+              type: 'user',
+              roles: [],
+              date: date
+            }
+        # convert it to json
+        jdata = JSON.generate(data)
+        # make the request and see if we get a token
+        response_json = RestClient.put url, jdata, {:content_type => :json}
+        # convert the response to a hash???
+        hash = JSON.parse response_json
+        # check to see if the key token is there
+        if hash.has_key?('token')
+          # it is, so return it
+          hash['token']
+        else
+          # it doesn't so return false
+          false
         end
       end
 
