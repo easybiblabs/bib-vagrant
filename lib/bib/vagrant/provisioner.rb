@@ -2,6 +2,7 @@ require 'vagrant'
 require 'rubygems'
 require 'rest_client'
 require 'json'
+require 'base64'
 
 # Define the plugin.
 class BibConfigurePlugin < Vagrant.plugin('2')
@@ -58,8 +59,9 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         end
 
         if ( registry && username && usermail && userpass)
-          token = get_npm_token(registry, username, usermail, userpass)
-          if token
+          auth_hash = Base64.strict_encode64(username + ':' + userpass)
+          auth_token = get_npm_token(registry, username, usermail, userpass)
+          if auth_token
             registry_ident = registry.clone
             registry_ident.slice!('http:')
 
@@ -67,12 +69,14 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
 
-            # this seems to break 1.4.x
+            # this seems to break 1.4.x (it gets username from _auth base64)
             # npmrc_set('username', username)
 
-            npmrc_set( '_auth', '"' + token + '"')
-            # for newer npm 
-            npmrc_set( registry_ident + ':_authToken', '"' + token + '"')
+            # for older npm user/pass hash authentication
+            npmrc_set( '_auth', '"' + auth_hash + '"')
+
+            # for newer npm token authentication
+            npmrc_set( registry_ident + ':_authToken', '"' + auth_token + '"')
             
           else
             @machine.ui.info("npm registry token request failed. Attempting old style auth configuration.")
@@ -80,10 +84,10 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
 
-            # this seems to break 1.4.x
+            # this seems to break 1.4.x (it gets username from _auth base64)
             # npmrc_set('username', username)
 
-            npmrc_set('_auth', userpass)
+            npmrc_set('_auth', auth_hash)
           end
 
         else 
