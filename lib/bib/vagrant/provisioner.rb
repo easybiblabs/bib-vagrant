@@ -66,6 +66,10 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('always-auth', 'true')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
+
+            # this seems to break 1.4.x
+            # npmrc_set('username', username)
+
             npmrc_set( '_auth', '"' + token + '"')
             # for newer npm 
             npmrc_set( registry_ident + ':_authToken', '"' + token + '"')
@@ -75,6 +79,10 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('always-auth', 'true')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
+
+            # this seems to break 1.4.x
+            # npmrc_set('username', username)
+
             npmrc_set('_auth', userpass)
           end
 
