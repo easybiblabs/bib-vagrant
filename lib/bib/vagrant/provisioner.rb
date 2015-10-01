@@ -67,6 +67,8 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
             npmrc_set('username', username)
+            npmrc_set( '_auth', '"' + token + '"')
+            # for newer npm 
             npmrc_set( registry_ident + ':_authToken', '"' + token + '"')
 
           else
