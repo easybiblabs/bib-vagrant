@@ -64,17 +64,6 @@ module Bib
         raise "Errors: #{errors.join(', ')}"
       end
 
-      def npm_set_or_delete(key, value)
-        command = "npm config --global "
-        if value
-          command << "set #{key} #{escape(value)}"
-        else
-          command << "delete #{key}"
-          @machine.communicate.sudo("#{npm_path} config --global set #{key} foo")
-        end
-        @machine.communicate.sudo(command)
-      end
-
       private
       def create(localconfigpath, vagrantconfig)
         begin
