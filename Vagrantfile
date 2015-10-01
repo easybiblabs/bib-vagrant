@@ -4,9 +4,15 @@ Vagrant.configure("2") do |config|
   foo = ::Bib::Vagrant::Config.new()
   puts foo.get.inspect
  
-  config.vm.box = 'imagineeasy-ubuntu-14.04.3_virtualbox-4.3.26r98988_chef-11.10.4_1'
-  config.vm.box_url = 'https://s3.amazonaws.com/easybibdeployment/imagineeasy-ubuntu-14.04.3_virtualbox-4.3.26r98988_chef-11.10.4_1.box'
+  config.vm.box = 'trusty-server-cloudimg-amd64-vagrant-disk1.box'
+  config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
 
-  config.vm.provision "bib_configure_npm" 
+  config.vm.provision 'shell', inline: 'apt-get -y update && apt-get -y install node npm'
+
+  config.vm.provision 'bib_configure_npm' 
+
+  config.vm.provision 'shell', inline: 'npm config list'
+
+  config.vm.provision 'shell', inline: 'npm -ddd view npm'
 
 end
