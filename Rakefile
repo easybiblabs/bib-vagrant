@@ -1,7 +1,4 @@
-require 'rubygems'
-require 'bundler/setup'
-
-require "coveralls"
+require 'coveralls'
 Coveralls.wear!
 
 ## Bundler::GemHelper.install_tasks
