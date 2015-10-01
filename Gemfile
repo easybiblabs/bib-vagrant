@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Specify your gem's dependencies in bib-vagrant.gemspec
 # (no idea how to get the github-reference below in .gemspec)
-# gemspec
+gemspec
 
 group :development do
   gem "vagrant", git: "https://github.com/mitchellh/vagrant.git"
