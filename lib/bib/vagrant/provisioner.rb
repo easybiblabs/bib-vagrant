@@ -66,18 +66,16 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             npmrc_set('always-auth', 'true')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
-            npmrc_set('username', username)
             npmrc_set( '_auth', '"' + token + '"')
             # for newer npm 
             npmrc_set( registry_ident + ':_authToken', '"' + token + '"')
-
+            
           else
             @machine.ui.info("npm registry token request failed. Attempting old style auth configuration.")
+            npmrc_set('always-auth', 'true')
             npmrc_set('registry', registry)
             npmrc_set('email', usermail)
-            npmrc_set('username', username)
             npmrc_set('_auth', userpass)
-            npmrc_set('always-auth', 'true')
           end
 
         else 
@@ -103,7 +101,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
       # end
 
       def npmrc_set(key, value)
-        command = "npm -g "
+        command = "npm -g config "
         if value
           command << "set #{key} #{value}"
         else
@@ -112,6 +110,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
           # fix for npmrc key not existing
           sudo_command("npm -g set #{key} GNDN")
         end
+        @machine.ui.info(command)
         sudo_command(command)
       end
 
