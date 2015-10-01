@@ -1,7 +1,6 @@
-Vagrant.require_plugin "bib-vagrant"
 
 Vagrant.configure("2") do |config|
-  foo = ::Bib::Vagrant::Config.new()
+  foo = Bib::Vagrant::Config.new()
   puts foo.get.inspect
  
   # for testing ubuntu 14.04
