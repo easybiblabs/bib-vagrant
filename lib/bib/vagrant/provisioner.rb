@@ -109,7 +109,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             message += " npm_userpass"
           end
 
-          @machine.ui.error("Missing " + message + " value in ~/.config/easybib/vagrantdefault.yml")
+          @machine.ui.error("Missing " + message + " value in ~/.config/easybib/vagrantdefault.yml (Your HOST OS)")
         end
 
         # if bib_config_values.includ?('composer_github_token')
