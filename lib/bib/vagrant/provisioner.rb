@@ -91,7 +91,25 @@ class BibConfigurePlugin < Vagrant.plugin('2')
           end
 
         else 
-          @machine.ui.error("Missing an npm_ value in config.")
+
+          message = ''
+          if !registry 
+            message += " npm_registry"
+          end
+
+          if !username
+            message += " npm_username"
+          end
+
+          if !usermail
+            message += " npm_userpass"
+          end
+
+          if !userpass
+            message += " npm_userpass"
+          end
+
+          @machine.ui.error("Missing " + message + " value in config.")
         end
 
         # if bib_config_values.includ?('composer_github_token')
