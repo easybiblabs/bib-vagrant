@@ -109,13 +109,14 @@ class BibConfigurePlugin < Vagrant.plugin('2')
             message += " npm_userpass"
           end
 
-          @machine.ui.error("Missing " + message + " value in ~/.config/easybib/vagrantdefault.yml (Your HOST OS)")
+          @machine.ui.warn("WARNING: Missing " + message + " value(s) in ~/.config/easybib/vagrantdefault.yml (Your HOST OS)")
+          @machine.ui.warn("WARNING: .npmrc not setup on guest OS")
         end
 
         # if bib_config_values.includ?('composer_github_token')
         #   composer_set('github-oauth.github.com', bib_config_values['composer_github_token'])
         # else
-        #   @machine.ui.error("Missing composer_github_token value in config")
+        #   @machine.ui.warn("Missing composer_github_token value in config")
         # end
   
         send_command("mkdir -p ~/.npm/_locks")
@@ -148,7 +149,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
       def send_command(command)
         @machine.communicate.execute(command) do |type, data|
           if type == :stderr
-            @machine.ui.error(data)
+            @machine.ui.warn(data)
           else
             @machine.ui.info(data)
           end
@@ -158,7 +159,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
       def sudo_command(command) 
         @machine.communicate.sudo(command) do |type, data|
           if type == :stderr
-            @machine.ui.error(data)
+            @machine.ui.warn(data)
           else
             @machine.ui.info(data)
           end
