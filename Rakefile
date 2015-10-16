@@ -1,5 +1,7 @@
-require "coveralls"
+require 'coveralls'
 Coveralls.wear!
+
+## Bundler::GemHelper.install_tasks
 
 require "bundler/gem_tasks"
 require "minitest/autorun"
