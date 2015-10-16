@@ -8,5 +8,5 @@
 
 # publishing new release
 
-Use `rake release` to tag & publish a new release
+Use `bundle exec rake release` to tag & publish a new release
 
