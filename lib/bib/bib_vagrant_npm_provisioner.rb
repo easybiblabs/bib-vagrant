@@ -187,8 +187,6 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         # convert it to json
         jdata = JSON.generate(data)
         # make the request and see if we get a token
-        puts 'get user token'
-        puts url
         if url.is_valid_url?
           begin
             response_json = RestClient.put url, jdata, content_type: :json
