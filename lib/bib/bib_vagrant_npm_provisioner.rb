@@ -4,6 +4,15 @@ require 'rest_client'
 require 'json'
 require 'base64'
 
+String.class_eval do
+    def is_valid_url?
+        uri = URI.parse self
+        uri.kind_of? URI::HTTP
+    rescue URI::InvalidURIError
+        false
+    end
+end
+
 # Define the provisioner.
 # do this outside of the bib::vagrant module for ease of calling
 class BibConfigurePlugin < Vagrant.plugin('2')
@@ -16,6 +25,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
       # Initialization, define internal state. Nothing needed.
 
       attr_reader :bib_config
+
 
       def initialize(machine, config)
         super(machine, config)
@@ -178,17 +188,26 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         # convert it to json
         jdata = JSON.generate(data)
         # make the request and see if we get a token
-        response_json = RestClient.put url, jdata, content_type: :json
-        # convert the response to a hash???
-        hash = JSON.parse response_json
-        # check to see if the key token is there
-        if hash.key?('token')
-          # it is, so return it
-          hash['token']
+        puts "get user token"
+        puts url
+        if url.is_valid_url?
+          response_json = RestClient.put url, jdata, content_type: :json
+
+          # convert the response to a hash???
+          hash = JSON.parse response_json
+          # check to see if the key token is there
+          if hash.key?('token')
+            # it is, so return it
+            hash['token']
+          else
+            # it doesn't so return false
+            false
+          end
         else
-          # it doesn't so return false
-          false
+          # not a valid URL
+          puts 'WARNING: ' + url + ' does not seem to be valid'
         end
+
       end
 
       # Nothing needs to be done on cleanup.
