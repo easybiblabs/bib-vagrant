@@ -115,6 +115,8 @@ npm_usermail: <npm or github users email address>
 npm_userpass: <npm or github authentication token>
 ```
 
+NOTE: the npm_registry should be in the format of 'http[s]://host.domain.tld/' - The trailing slash is important
+
 ## Contributing
 
 See [Contributing](CONTRIBUTING.md)
