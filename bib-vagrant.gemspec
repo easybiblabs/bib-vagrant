@@ -6,7 +6,7 @@ require 'bib/version'
 Gem::Specification.new do |spec|
   spec.name          = 'bib-vagrant'
   spec.version       = Bib::Vagrant::VERSION
-  spec.authors       = %w(tillk fh gilleyj)
+  spec.authors       = %w('tillk', 'fh', 'gilleyj')
   spec.email         = ['till@php.net']
   spec.description   = "A rubygem to centralize configuration and setup in every project's Vagrantfile"
   spec.summary       = 'Centralize configuration and setup'
