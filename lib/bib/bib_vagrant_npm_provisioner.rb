@@ -191,21 +191,28 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         puts "get user token"
         puts url
         if url.is_valid_url?
-          response_json = RestClient.put url, jdata, content_type: :json
-
-          # convert the response to a hash???
-          hash = JSON.parse response_json
-          # check to see if the key token is there
-          if hash.key?('token')
-            # it is, so return it
-            hash['token']
-          else
-            # it doesn't so return false
+          begin
+            response_json = RestClient.put url, jdata, content_type: :json
+            # convert the response to a hash???
+            hash = JSON.parse response_json
+            # check to see if the key token is there
+            if hash.key?('token')
+              # it is, so return it
+              hash['token']
+            else
+              # it doesn't so return false
+              false
+            end
+          rescue => error
+            # not a valid connection
+            puts 'WARNING: could not connect to ' + url + ' to exchange tokens'
             false
           end
+
         else
           # not a valid URL
           puts 'WARNING: ' + url + ' does not seem to be valid'
+          false
         end
 
       end
