@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'thor'
-require 'bib/vagrant'
+require 'bib'
 require 'colored'
 
 Encoding.default_external = Encoding::UTF_8
