@@ -1,7 +1,4 @@
-puts 'plugin.rb'
-
 begin
-  puts '    reqire bib_vagrant'
   require 'bib_vagrant'
 rescue LoadError
   raise 'This is a vagrant plugin, do not use standalone.'

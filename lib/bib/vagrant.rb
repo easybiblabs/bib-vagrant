@@ -1,5 +1,3 @@
-puts 'vagrant.rb'
-
 require_relative 'version'
 require_relative 'bib_vagrant'
 require_relative 'bib_vagrant_npm_provisioner'

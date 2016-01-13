@@ -1,5 +1,3 @@
-puts 'bib_vagrant_npm_provisioner.rb'
-
 require 'vagrant'
 require 'rubygems'
 require 'rest_client'
