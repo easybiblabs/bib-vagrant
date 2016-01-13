@@ -1,5 +1,3 @@
-puts 'bib_vagrant.rb'
-
 require 'yaml'
 
 module Bib
