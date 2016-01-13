@@ -5,12 +5,12 @@ require 'json'
 require 'base64'
 
 String.class_eval do
-    def is_valid_url?
-        uri = URI.parse self
-        uri.kind_of? URI::HTTP
-    rescue URI::InvalidURIError
-        false
-    end
+  def is_valid_url?
+    uri = URI.parse self
+    uri.is_a? URI::HTTP
+  rescue URI::InvalidURIError
+    false
+  end
 end
 
 # Define the provisioner.
@@ -25,7 +25,6 @@ class BibConfigurePlugin < Vagrant.plugin('2')
       # Initialization, define internal state. Nothing needed.
 
       attr_reader :bib_config
-
 
       def initialize(machine, config)
         super(machine, config)
@@ -188,7 +187,7 @@ class BibConfigurePlugin < Vagrant.plugin('2')
         # convert it to json
         jdata = JSON.generate(data)
         # make the request and see if we get a token
-        puts "get user token"
+        puts 'get user token'
         puts url
         if url.is_valid_url?
           begin
@@ -214,7 +213,6 @@ class BibConfigurePlugin < Vagrant.plugin('2')
           puts 'WARNING: ' + url + ' does not seem to be valid'
           false
         end
-
       end
 
       # Nothing needs to be done on cleanup.
