@@ -18,6 +18,12 @@ end
 class BibConfigurePlugin < Vagrant.plugin('2')
   name 'NPM configuration Provisioner'
 
+  # Create a local config, unless it already exists
+  action_hook(:environment_load) do |hook|
+    config = Bib::Vagrant::Config.new
+    config.get # Creates the config file unless existing already and the gets it
+  end
+
   # This plugin provides a provisioner called unix_reboot.
   provisioner 'bib_configure_npm' do
     # Create a provisioner.
