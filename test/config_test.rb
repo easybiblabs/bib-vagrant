@@ -1,4 +1,5 @@
 require 'bib/bib_vagrant'
+require 'bib/bib_vagrant_config'
 
 class ConfigTest < Minitest::Test
   @@fixture_dir = nil
