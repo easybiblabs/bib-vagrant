@@ -117,7 +117,30 @@ npm_userpass: <npm or github authentication token>
 
 NOTE: the npm_registry should be in the format of 'http[s]://host.domain.tld/' - The trailing slash is important
 
+## Developing and Testing
+
+Make sure you are using a Bundler version which is compatible with Vagrant which comes from GitHub like defined here:
+
+```
+group :development do
+  gem 'vagrant', git: 'https://github.com/mitchellh/vagrant.git'
+end
+```
+
+Bundler version 1.7.15 works fine and can be installed like this:
+
+```
+gem install bundler -v '~> 1.7.0'
+```
+
+Then, when you want to test Bib Vagrant use:
+
+```
+bundle _1.7.15_ exec vagrant
+```
+
+Happy developing and testing.
+
 ## Contributing
 
 See [Contributing](CONTRIBUTING.md)
-
