@@ -99,10 +99,10 @@ module Bib
         puts "\nNOTE: you're using rsync, run\n\n\tvagrant gatling-rsync-auto\n\nto auto-sync the shared folders\n\n"
       end
 
-      def install_node_artifacts(machine)
+      def install_node_artifacts(machine, node_uri)
         machine.vm.provision 'shell', inline: <<-SHELL
             echo "grabbing /usr/lib/node_modules.."
-            sudo wget --continue -O /tmp/usr_node.tgz https://s3.amazonaws.com/test-scholar/usr_node.tgz
+            sudo wget --continue -O /tmp/usr_node.tgz #{node_uri}
             sudo mkdir -p /usr/lib/node_modules
             sudo tar --overwrite -zxof /tmp/usr_node.tgz -C /usr/lib/
             echo ".. done."
