@@ -2,93 +2,74 @@ require 'yaml'
 
 module Bib
   module Vagrant
-    class Config
-      @@home_dir = nil
-      @@verbose = true
+    # Checks for plugins and takes a plugin list plus optional true/false for checking some
+    # _esoteric_ plugin constellation, see Bib::Vagrant#check_esoteric_plugin_constellation.
+    #
+    # ==== Example where given plugins are all mandatory (plugins are given as an array)
+    #
+    #   Bib::Vagrant.check_plugins(['landrush', 'vagrant-hosts'])
+    #
+    # ==== Example where a plugin may be mandatory but doesn't need to (plugins are given as a hash)
+    #
+    #   Bib::Vagrant.check_plugins(
+    #     {
+    #       'landrush' => true,
+    #       'vagrant-hosts' => false
+    #     },
+    #     true
+    #   )
+    def self.check_plugins(plugins, check_esoteric_plugin_constellation = true)
+      complete = true
 
-      def initialize(home = '~', verbose = true)
-        @@home = home
-        @@verbose = verbose
+      plugins.each do |plugin, mandatory|
+        next if ::Vagrant.has_plugin?(plugin)
+        next if ENV['VAGRANT_CI']
+        puts "!!! - You are missing a plugin: #{plugin}"
+        puts '---'
+        puts "### - Please run: vagrant plugin install #{plugin}"
+        puts '---'
+        puts "!!! - Read more here: #{plugin_list[plugin]}"
+        complete = false if mandatory
       end
 
-      def get
-        vagrantconfig = get_defaults
+      if check_esoteric_plugin_constellation
+        complete = self.check_esoteric_plugin_constellation ? complete : false
+      end
 
-        begin
-          localconfigfile = File.open(get_path, 'r')
-          vagrantconfig.merge!(YAML.load(localconfigfile.read))
-        rescue Errno::ENOENT
-          puts 'WARNING: No vagrant user-config found, using default cookbook path' if @@verbose
-          create(get_path, vagrantconfig)
+      complete
+    end
+
+    # Checks for some _esoteric_ plugin constellation.
+    #
+    # Please follow the output instructions when the _esoteric_ constellation is met.
+    def self.check_esoteric_plugin_constellation
+      complete = true
+
+      if ::Vagrant.has_plugin?('landrush') && !Gem.loaded_specs['celluloid'].nil?
+        if Gem.loaded_specs['celluloid'].version.to_s == '0.16.1'
+          puts 'This is an esoteric issue for vagrant 1.7.4/landrush 18 and virtualbox 5.x'
+          puts 'celluloid is 0.16.1'
+          puts 'Please do the following on your HOST OS'
+          puts '    export GEM_HOME=~/.vagrant.d/gems'
+          puts '    gem uninstall celluloid -v 0.16.1'
+          puts '    gem install celluloid -v 0.16.0'
+          complete = false
         end
-
-        vagrantconfig
       end
 
-      def has?
-        File.exist?(get_path)
-      end
+      complete
+    end
 
-      def get_path
-        File.expand_path("#{@@home}/.config/easybib/vagrantdefault.yml")
-      end
-
-      def validate!(config)
-        current_config_keys = config.keys
-
-        get_defaults.keys.each do |required_key|
-          fail "Missing #{required_key}!" unless current_config_keys.include?(required_key)
-        end
-
-        errors = []
-        log_level = %w(debug info warn error fatal)
-        bool = [TrueClass, FalseClass]
-
-        cookbook_path = File.expand_path(config['cookbook_path'])
-
-        errors << 'nfs: must be a boolean' unless bool.include?(config['nfs'].class)
-        errors << 'gui: must be a boolean' unless bool.include?(config['gui'].class)
-        errors << 'cookbook_path: does not exist' unless File.directory?(cookbook_path)
-        errors << "chef_log_level: must be one of #{log_level.join}" unless log_level.include?(config['chef_log_level'])
-
-        unless config['additional_json'].empty?
-          errors << 'additional_json: must be empty or valid json' unless is_valid_json?(config['additional_json'])
-        end
-
-        return true if errors.count == 0
-
-        fail "Errors: #{errors.join(', ')}"
-      end
-
-      private
-
-      def create(localconfigpath, vagrantconfig)
-        FileUtils.mkdir_p(File.dirname(localconfigpath))
-        File.open(localconfigpath, 'w+') do |file|
-          file.write(vagrantconfig.to_yaml)
-          puts "INFO: Created default vagrant user-config in #{localconfigpath}" if @@verbose
-          puts 'INFO: You probably want to fix the path to the cookbooks in this file.' if @@verbose
-        end
-      rescue
-        puts "WARNING: Unable to create default #{localconfigpath} - please do it manually." if @@verbose
-      end
-
-      def get_defaults
-        {
-          'nfs' => false,
-          'cookbook_path' => '~/Sites/easybib/cookbooks',
-          'chef_log_level' => 'debug',
-          'additional_json' => '{}',
-          'gui' => false
-        }
-      end
-
-      def is_valid_json?(json)
-        JSON.parse(json)
-        return true
-      rescue JSON::ParserError
-        false
-      end
+    # Returns an array which lists plugins to check where index is the name of the plugin and value
+    # is the url where the user can get more information about it.
+    def self.plugin_list
+      {
+        'landrush' => 'https://github.com/phinze/landrush',
+        'vagrant-hosts' => 'https://github.com/adrienthebo/vagrant-hosts',
+        'vagrant-faster' => 'https://github.com/rdsubhas/vagrant-faster#how-much-does-it-allocate',
+        'vagrant-cachier' => 'https://github.com/easybib/issues/wiki/Knowledgebase:-Global-Vagrant-setup#enable-vagrant-cachier-globally',
+        'bib-vagrant' => 'See https://github.com/easybiblabs/bib-vagrant/blob/master/README.md'
+      }
     end
   end
 end

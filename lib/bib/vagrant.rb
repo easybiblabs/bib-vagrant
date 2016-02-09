@@ -1,5 +1,6 @@
 require_relative 'version'
 require_relative 'bib_vagrant'
+require_relative 'bib_vagrant_config'
 require_relative 'bib_vagrant_npm_provisioner'
 
 require 'thor'
