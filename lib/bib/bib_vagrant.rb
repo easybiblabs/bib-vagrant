@@ -77,7 +77,8 @@ module Bib
           'vagrant-hosts' => 'https://github.com/adrienthebo/vagrant-hosts',
           'vagrant-faster' => 'https://github.com/rdsubhas/vagrant-faster#how-much-does-it-allocate',
           'vagrant-cachier' => 'https://github.com/easybib/issues/wiki/Knowledgebase:-Global-Vagrant-setup#enable-vagrant-cachier-globally',
-          'bib-vagrant' => 'See https://github.com/easybiblabs/bib-vagrant/blob/master/README.md'
+          'bib-vagrant' => 'See https://github.com/easybiblabs/bib-vagrant/blob/master/README.md',
+          'vagrant-logs' => 'See https://github.com/easybiblabs/vagrant-logs/blob/master/README.md'
         }
       end
 
