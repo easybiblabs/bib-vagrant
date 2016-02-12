@@ -126,11 +126,11 @@ module Bib
         dna
       end
 
-      def prepare_app_settings(vagrantconfig, machine, dna, host_folder, applicationlist = 'applications')
+      def prepare_app_settings(vagrantconfig, machine, dna, host_folder_root, applicationlist = 'applications')
         dna = add_composertoken_to_dna(dna, vagrantconfig)
         dna['vagrant'][applicationlist].each do |app, app_config|
           vagrant_share = File.expand_path(app_config['app_root_location'])
-          host_folder += "/#{app}"
+          host_folder = host_folder_root + "/#{app}"
           if vagrantconfig['nfs']
             machine.vm.synced_folder host_folder, vagrant_share, type: 'nfs', mount_options: ['nolock,vers=3,udp,noatime,actimeo=1']
           elsif vagrantconfig['rsync']
