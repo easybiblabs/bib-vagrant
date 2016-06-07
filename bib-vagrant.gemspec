@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = "A rubygem to centralize configuration and setup in every project's Vagrantfile"
   spec.summary       = 'Centralize configuration and setup'
   spec.homepage      = 'https://github.com/easybiblabs/bib-vagrant'
-  spec.license       = 'New BSD License'
+  spec.license       = 'Apache-2.0'
 
   spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
