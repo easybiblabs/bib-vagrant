@@ -137,6 +137,9 @@ module Bib
           end
           if vagrantconfig['nfs']
             machine.vm.synced_folder host_folder, vagrant_share, type: 'nfs', mount_options: ['nolock,vers=3,udp,noatime,actimeo=1']
+            if ::Vagrant.has_plugin?("vagrant-bindfs")
+		machine.bindfs.bind_folder vagrant_share, vagrant_share
+            end
           elsif vagrantconfig['rsync']
             machine.vm.synced_folder host_folder, vagrant_share, type: 'rsync'
           else
