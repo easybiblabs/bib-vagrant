@@ -6,7 +6,7 @@ require 'bib/version'
 Gem::Specification.new do |spec|
   spec.name          = 'bib-vagrant'
   spec.version       = Bib::Vagrant::VERSION
-  spec.authors       = %w(tillk fh gilleyj seppsepp)
+  spec.authors       = %w(tillk fh gilleyj seppsepp baccenfutter)
   spec.email         = ['till@php.net']
   spec.description   = "A rubygem to centralize configuration and setup in every project's Vagrantfile"
   spec.summary       = 'Centralize configuration and setup'
@@ -18,9 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'thor', '>= 0.18.1'
+
+  spec.add_dependency 'thor', '>= 0.19.4'
   spec.add_dependency 'colored', '>= 1.2'
-  spec.add_dependency 'rest_client'
+  spec.add_dependency 'rest-client', '>= 1.6.0', '< 3.0'
   spec.add_dependency 'json'
 
   spec.add_development_dependency 'bundler', '~> 1.5'
